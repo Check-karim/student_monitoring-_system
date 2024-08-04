@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <h1>Welcome to the Admin Dashboard</h1>
+
+    <!-- Logout Button -->
+    <a href="{{ url_for('main.logout') }}" class="btn btn-danger mb-3">Logout</a>
+    
+    <!-- Tabs for navigation -->
+    <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="update-tab" data-bs-toggle="tab" href="#update" role="tab">Update Account</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="tasks-tab" data-bs-toggle="tab" href="#tasks" role="tab">View Tasks</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="adminTabsContent">
+        <!-- Update Account Tab -->
+        <div class="tab-pane fade show active" id="update" role="tabpanel" aria-labelledby="update-tab">
+            <form method="post" action="{{ url_for('main.admin_update') }}">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" value="{{admin.email}}" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+
+        <!-- View Tasks Tab -->
+        <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th>Task ID</th>
+                        <th>User ID</th>
+                        <th>Housekeeper ID</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td>{{ task.id }}</td>
+                        <td>{{ task.user_id }}</td>
+                        <td>{{ task.housekeeper_id }}</td>
+                        <td>{{ 'Completed' if task.is_done else 'Pending' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
