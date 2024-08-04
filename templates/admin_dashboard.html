@@ -13,7 +13,10 @@
             <a class="nav-link active" id="update-tab" data-bs-toggle="tab" href="#update" role="tab">Update Account</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="tasks-tab" data-bs-toggle="tab" href="#tasks" role="tab">View Tasks</a>
+            <a class="nav-link" id="courses-tab" data-bs-toggle="tab" href="#courses" role="tab">Create Courses</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="students-tab" data-bs-toggle="tab" href="#students" role="tab">Create Students</a>
         </li>
     </ul>
     <div class="tab-content" id="adminTabsContent">
@@ -32,28 +35,46 @@
             </form>
         </div>
 
-        <!-- View Tasks Tab -->
-        <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
-            <table class="table mt-3">
-                <thead>
-                    <tr>
-                        <th>Task ID</th>
-                        <th>User ID</th>
-                        <th>Housekeeper ID</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for task in tasks %}
-                    <tr>
-                        <td>{{ task.id }}</td>
-                        <td>{{ task.user_id }}</td>
-                        <td>{{ task.housekeeper_id }}</td>
-                        <td>{{ 'Completed' if task.is_done else 'Pending' }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <!-- Create Courses Tab -->
+        <div class="tab-pane fade" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+            <form method="post" action="{{ url_for('main.admin_create_course') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Course Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="acronym" class="form-label">Course Acronym</label>
+                    <input type="text" class="form-control" id="acronym" name="acronym" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Course</button>
+            </form>
+        </div>
+
+        <!-- Create Students Tab -->
+        <div class="tab-pane fade" id="students" role="tabpanel" aria-labelledby="students-tab">
+            <form method="post" action="{{ url_for('main.admin_create_student') }}">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Student Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone_number" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                <div class="mb-3">
+                    <label for="course_acronym" class="form-label">Course Acronym</label>
+                    <select class="form-control" id="course_acronym" name="course_acronym" required>
+                        {% for course in courses %}
+                            <option value="{{ course.acronym }}">{{ course.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Student</button>
+            </form>
         </div>
     </div>
 </div>
