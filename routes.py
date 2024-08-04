@@ -127,7 +127,7 @@ def admin_create_student():
         # Generate barcode
         barcode_writer = ImageWriter()
         barcode_obj = barcode.get('code128', registration_number, writer=barcode_writer)
-        barcode_path = os.path.join(barcode_dir, f'{registration_number}.png')
+        barcode_path = os.path.join(barcode_dir, f'{registration_number.replace("/","_")}.png')
         barcode_obj.save(barcode_path)
 
         student.save()

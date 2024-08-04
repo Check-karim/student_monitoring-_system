@@ -7,6 +7,15 @@
     <!-- Logout Button -->
     <a href="{{ url_for('main.logout') }}" class="btn btn-danger mb-3">Logout</a>
     
+    <!-- {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash">
+                {% for message in messages %}
+                    <li>{{message}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %} -->
     <!-- Tabs for navigation -->
     <ul class="nav nav-tabs" id="adminTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -59,7 +68,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="phone_number" class="form-label">Phone Number</label>
-                    <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                    <input type="text" pattern="0\d{9}" placeholder="eg:0791447409" class="form-control" id="phone_number" name="phone_number" required>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
