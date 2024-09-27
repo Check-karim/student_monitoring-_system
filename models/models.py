@@ -33,10 +33,11 @@ class Student(db.Model):
     __tablename__ = 'student'
 
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255),nullable=False,unique=True)
     name = db.Column(db.String(255), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
+    dob = db.Column(db.Date, nullable=False)
     registration_number = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
     course_acronym = db.Column(db.String(10), nullable=False)
     created_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now())
     updated_at = db.Column(db.DateTime(), nullable=False, server_default=db.func.now(), onupdate=db.func.now())
@@ -46,10 +47,11 @@ class Student(db.Model):
         return {
             'id': self.id,
             'name': self.name,
+            'email': self.email,
+            'dob': self.dob,
             'phone_number': self.phone_number,
             'registration_number': self.registration_number,
             'course_acronym': self.course_acronym,
-            'password': self.password
         }
 
     def save(self):

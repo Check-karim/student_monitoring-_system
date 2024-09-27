@@ -1,65 +1,55 @@
 {% extends "base.html" %}
-{% block title %} STUDENT MONITORING SYSTEM - HomePage {% endblock %}
+{% block title %} HomePage {% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
+ <!-- Navigation Bar -->
+ <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">HKMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#get-started">Get Started</a>
                 </li>
             </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                    <form class="form-container mt-4" method="POST" action="{{ url_for('main.login') }}">
-                        <div class="mb-3">
-                            <label for="userType" class="form-label">Login as</label>
-                            <select class="form-select" id="userType" name="user_type">
-                                <option value="student">Student</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                        <div class="mb-3 student-login">
-                            <label for="loginRegNumber" class="form-label">Registration Number</label>
-                            <input type="text" class="form-control" id="loginRegNumber" name="registration_number">
-                        </div>
-                        <div class="mb-3 admin-login">
-                            <label for="loginEmail" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="loginEmail" name="email">
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="loginPassword" name="password">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </form>
-                </div>
-                <!-- Register tab content -->
-            </div>
         </div>
     </div>
-</div>
+</nav>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const userTypeSelect = document.getElementById('userType');
-        const studentLogin = document.querySelector('.student-login');
-        const adminLogin = document.querySelector('.admin-login');
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Welcome to HKMS</h1>
+        <p>Your one-stop solution for housekeeping management</p>
+        <a href="#get-started" class="btn btn-primary">Get Started</a>
+    </div>
+</section>
 
-        function toggleLoginFields() {
-            if (userTypeSelect.value === 'student') {
-                studentLogin.style.display = 'block';
-                adminLogin.style.display = 'none';
-            } else {
-                studentLogin.style.display = 'none';
-                adminLogin.style.display = 'block';
-            }
-        }
+<!-- About Section -->
+<section id="about" class="container mt-5">
+    <h2>About Us</h2>
+    <p>HKMS is designed to streamline your housekeeping tasks, allowing you to manage everything with ease and efficiency. Whether you're a homeowner or a housekeeper, our system helps you stay organized and connected.</p>
+</section>
 
-        userTypeSelect.addEventListener('change', toggleLoginFields);
+<!-- Get Started Section -->
+<section id="get-started" class="container mt-5">
+    <h2>Get Started</h2>
+    <p>Ready to simplify your housekeeping? Register now and start managing your tasks effortlessly.</p>
+    <a href="{{ url_for('main.getStarted') }}" class="btn btn-primary">Get Started</a>
+</section>
 
-        // Initial toggle
-        toggleLoginFields();
-    });
-</script>
+<!-- Footer -->
+<footer class="footer mt-5">
+    <div class="container">
+        <p>&copy; 2024 Housekeeping Management System. All rights reserved.</p>
+    </div>
+</footer>
 {% endblock %}

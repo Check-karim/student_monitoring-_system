@@ -5,6 +5,7 @@ from barcode.writer import ImageWriter
 from datetime import datetime
 import random
 import os
+from extensions import db
 
 main = Blueprint('main', __name__)
 
@@ -12,25 +13,20 @@ main = Blueprint('main', __name__)
 def home():
     return render_template("index.html")
 
+@main.route('/getStarted', methods=['GET'])
+def getStarted():
+    return render_template("login-register.html")
+
 @main.route('/login', methods=['POST'])
 def login():
     password = request.form.get('password')
-    user_type = request.form.get('user_type')
-
-    if user_type == 'student':
-        registration_number = request.form.get('registration_number')
-        user = Student.query.filter_by(registration_number=registration_number).first()
-    elif user_type == 'admin':
-        email = request.form.get('email')
-        user = Admin.query.filter_by(email=email).first()
+    email = request.form.get('email')
+    user = Admin.query.filter_by(email=email).first()
 
     if user and user.password == password:
         session['user_id'] = user.id
-        session['user_type'] = user_type
-        if user_type == 'student':
-            return redirect(url_for('main.student_dashboard'))
-        elif user_type == 'admin':
-            return redirect(url_for('main.admin_dashboard'))
+
+        return redirect(url_for('main.admin_dashboard'))
     else:
         flash('Login failed! Check your credentials and try again.')
         return redirect(url_for('main.home'))
@@ -47,7 +43,8 @@ def admin_dashboard():
     if 'user_id' in session and session.get('user_type') == 'admin':
         admin = Admin.query.filter_by(id=session['user_id']).first()
         courses = Course.get_all()
-        return render_template("admin_dashboard.html", admin=admin, courses=courses)
+        students = Student.query.all()
+        return render_template("admin_dashboard.html",students=students, admin=admin, courses=courses)
     else:
         return redirect(url_for('main.home'))
 
@@ -100,7 +97,8 @@ def admin_create_student():
     if 'user_id' in session and session.get('user_type') == 'admin':
         name = request.form.get('name')
         phone_number = request.form.get('phone_number')
-        password = request.form.get('password')
+        email = request.form.get('email')
+        dob = request.form.get('dob')
         course_acronym = request.form.get('course_acronym')
 
         # Generate the registration number
@@ -108,7 +106,7 @@ def admin_create_student():
         random_number = random.randint(1000, 9999)
         registration_number = f"{course_acronym}/{current_year}/{random_number}"
 
-        if not name or not phone_number or not password or not course_acronym:
+        if not name or not phone_number or not email or not dob or not course_acronym:
             flash('Please fill in all the fields.')
             return redirect(url_for('main.admin_dashboard'))
 
@@ -117,7 +115,7 @@ def admin_create_student():
             flash('Invalid course acronym.')
             return redirect(url_for('main.admin_dashboard'))
 
-        student = Student(name=name, phone_number=phone_number, registration_number=registration_number, password=password, course_acronym=course_acronym)
+        student = Student(name=name, phone_number=phone_number, registration_number=registration_number, dob=dob,email=email, course_acronym=course_acronym)
 
         # Create the directory if it doesn't exist
         barcode_dir = 'static/barcodes'
@@ -132,6 +130,47 @@ def admin_create_student():
 
         student.save()
         flash('Student created successfully!')
+        return redirect(url_for('main.admin_dashboard'))
+    else:
+        return redirect(url_for('main.home'))
+
+
+@main.route('/edit_student/<int:student_id>', methods=['GET', 'POST'])
+def edit_student(student_id):
+    if 'user_id' in session and session.get('user_type') == 'admin':
+        student = Student.query.filter_by(id=student_id).first()
+
+        name = request.form.get('name')
+        dob = request.form.get('dob')
+        email = request.form.get('email')
+
+        if name:
+            student.name = name
+        if dob:
+            student.dob = dob
+        if email:
+            student.email = email
+
+            try:
+                student.save()
+                flash('Student updated successfully!')
+            except:
+                flash('Failed to update student. Please try again.')
+
+            return redirect(url_for('main.admin_dashboard'))
+
+        return render_template('edit_student.html', student=student)
+    else:
+        return redirect(url_for('main.home'))
+
+@main.route('/delete_student/<int:student_id>', methods=['GET'])
+def delete_student(student_id):
+    if 'user_id' in session:
+        student = Student.query.filter_by(id=student_id).first()
+        if student:
+            db.session.delete(student)
+            db.session.commit()
+            flash('Student deleted successfully!')
         return redirect(url_for('main.admin_dashboard'))
     else:
         return redirect(url_for('main.home'))

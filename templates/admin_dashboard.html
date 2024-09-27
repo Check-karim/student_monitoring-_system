@@ -7,15 +7,13 @@
     <!-- Logout Button -->
     <a href="{{ url_for('main.logout') }}" class="btn btn-danger mb-3">Logout</a>
     
-    <!-- {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flash">
-                {% for message in messages %}
-                    <li>{{message}}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %} -->
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
     <!-- Tabs for navigation -->
     <ul class="nav nav-tabs" id="adminTabs" role="tablist">
         <li class="nav-item" role="presentation">
@@ -27,7 +25,11 @@
         <li class="nav-item" role="presentation">
             <a class="nav-link" id="students-tab" data-bs-toggle="tab" href="#students" role="tab">Create Students</a>
         </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="view-students-tab" data-bs-toggle="tab" href="#view-students" role="tab">View Students</a>
+        </li>
     </ul>
+
     <div class="tab-content" id="adminTabsContent">
         <!-- Update Account Tab -->
         <div class="tab-pane fade show active" id="update" role="tabpanel" aria-labelledby="update-tab">
@@ -71,8 +73,12 @@
                     <input type="text" pattern="0\d{9}" placeholder="eg:0791447409" class="form-control" id="phone_number" name="phone_number" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="dob" class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
                 </div>
                 <div class="mb-3">
                     <label for="course_acronym" class="form-label">Course Acronym</label>
@@ -84,6 +90,36 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Create Student</button>
             </form>
+        </div>
+
+        <!-- View Students Tab -->
+        <div class="tab-pane fade" id="view-students" role="tabpanel" aria-labelledby="view-students-tab">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Registration Number</th>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.registration_number }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.phone_number }}</td>
+                        <td>{{ student.course_acronym }}</td>
+                        <td>
+                            <a href="{{ url_for('main.edit_student', student_id=student.id) }}" class="btn btn-warning">Edit</a>
+                            <a href="{{ url_for('main.delete_student', student_id=student.id) }}" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
