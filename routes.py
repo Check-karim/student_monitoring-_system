@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 import random
 from extensions import db
+import subprocess
 
 main = Blueprint('main', __name__)
 
@@ -33,13 +34,19 @@ def login():
         flash(f"An error occurred during login: {str(e)}")
         return redirect(url_for('main.home'))
 
+
 @main.route('/student_dashboard', methods=['GET'])
 def student_dashboard():
-    if 'user_id' in session and session.get('user_type') == 'student':
-        return render_template("student_dashboard.html")
-    else:
-        flash("Unauthorized access.")
-        return redirect(url_for('main.home'))
+    # Get the student_id from the query parameters
+    student_id = request.args.get('student_id')
+
+    # Check if student_id is provided
+    if student_id is None:
+        flash("Student ID is missing. Redirecting to the Login.")
+        return redirect(url_for('main.login'))
+    student = Student.query.filter_by(id=student_id).first()
+    # Render the student dashboard if everything is okay
+    return render_template("student_dashboard.html", student=student)
 
 @main.route('/admin_dashboard', methods=['GET'])
 def admin_dashboard():
@@ -214,25 +221,29 @@ def delete_student(student_id):
         flash(f"An error occurred while deleting the student: {str(e)}")
         return redirect(url_for('main.admin_dashboard'))
 
+
 @main.route('/barcode_login', methods=['POST'])
 def barcode_login():
+    data = request.get_json()
+    barcode = data.get('barcode')
+    print(barcode)
+
+    if not barcode:
+        flash('No barcode data received')
+        return jsonify({"success": False, "message": "No barcode data received"})
+
     try:
-        data = request.get_json()
-        barcode = data.get('barcode')
-
-        # Log the received barcode for debugging purposes
-        print(f"Received Barcode: {barcode}")
-
-        # Find the student with the matching barcode (registration number)
-        student = Student.query.filter_by(registration_number=barcode).first()
+        # Example: Searching for a student by barcode in the database
+        student = Student.query.filter_by(
+            registration_number=barcode).first()  # Assuming 'barcode' is a field in your Student model
 
         if student:
-            # Log the student in by setting the session
-            session['user_id'] = student.id
-            session['user_type'] = 'student'
-            return jsonify({'success': True})
+            # If the student is found, create the redirect URL for the student dashboard
+            student_id = student.id  # Assuming the student model has an 'id' attribute
+            redirect_url = url_for('main.student_dashboard', student_id=student_id, _external=True)
+            return jsonify({"success": True, "redirect_url": redirect_url})
         else:
-            return jsonify({'success': False})
+            return jsonify({"success": False, "message": "Student not found"})
+
     except Exception as e:
-        flash(f"An error occurred during barcode login: {str(e)}")
-        return jsonify({'success': False})
+        return jsonify({"success": False, "message": f"Error processing the request: {str(e)}"})

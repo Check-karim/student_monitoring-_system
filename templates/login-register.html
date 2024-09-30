@@ -9,9 +9,6 @@
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">Login</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="barcode-tab" data-bs-toggle="tab" data-bs-target="#barcode" type="button" role="tab" aria-controls="barcode" aria-selected="false">Barcode Login</button>
-                </li>
             </ul>
 
             {% for message in get_flashed_messages() %}
@@ -37,93 +34,28 @@
                     </form>
                 </div>
 
-                <!-- Barcode Login -->
-                <div class="tab-pane fade" id="barcode" role="tabpanel" aria-labelledby="barcode-tab">
-                    <div class="form-container mt-4 text-center">
-                        <p>Use your barcode to log in by scanning it below.</p>
-                        <div id="scanner-container" style="width: 400px; height: 300px; border: 1px solid #ddd;"></div>
-                        <button class="btn btn-primary mt-2" id="start-button" onclick="startBarcodeScanner()">Start Barcode Scanner</button>
-                        <button class="btn btn-danger mt-2" id="stop-button" onclick="stopBarcodeScanner()" style="display: none;">Stop Scanner</button>
-                        <p id="barcode-result" class="mt-3"></p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- JavaScript for Barcode Scanner -->
 <script>
-let scanning = false;
-
 function startBarcodeScanner() {
-    if (scanning) return;
+    document.getElementById('start-button').disabled = true;
 
-    scanning = true;
-    document.getElementById('start-button').style.display = 'none';
-    document.getElementById('stop-button').style.display = 'inline';
-
-    Quagga.init({
-        inputStream: {
-            name: "Live",
-            type: "LiveStream",
-            target: document.querySelector('#scanner-container'),
-            constraints: {
-                width: 400,
-                height: 300,
-                facingMode: "environment"
-            }
-        },
-        decoder: {
-            readers: ["code_128_reader"],
-            multiple: false
-        },
-        locate: true
-    }, function(err) {
-        if (err) {
-            console.log(err);
-            return;
+    fetch('/start_scanner', {
+        method: 'GET',
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Scanner started successfully.");
+        } else {
+            console.error("Failed to start scanner.");
         }
-        Quagga.start();
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
-
-    Quagga.onDetected(function(result) {
-        const code = result.codeResult.code;
-        document.getElementById('barcode-result').textContent = "Barcode detected: " + code;
-
-        Quagga.stop();
-        scanning = false;
-        document.getElementById('start-button').style.display = 'inline';
-        document.getElementById('stop-button').style.display = 'none';
-
-        fetch('/barcode_login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ barcode: code })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = "/student_dashboard";
-            } else {
-                alert("Barcode not found. Please try again.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    });
-}
-
-function stopBarcodeScanner() {
-    if (!scanning) return;
-
-    Quagga.stop();
-    scanning = false;
-    document.getElementById('start-button').style.display = 'inline';
-    document.getElementById('stop-button').style.display = 'none';
 }
 </script>
 {% endblock %}
