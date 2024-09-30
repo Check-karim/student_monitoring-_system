@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Admin Dashboard{% endblock %}
+{% block stylePic %}class='bg-pic'{% endblock %}
 {% block content %}
 <div class="container mt-5">
+     <div class="row">
+        <div class="col-md-6 offset-md-3 bg-color p-4">
     <h1>Welcome to the Admin Dashboard</h1>
 
     <!-- Logout Button -->
@@ -121,6 +124,8 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    </div>
     </div>
 </div>
 {% endblock %}

@@ -23,7 +23,7 @@
 } */
 
 .bg-pic{
-    background-image: url('iStoc.jpg');
+    background-image: url('Mount-Kenya-University-Alumni-Plaza.png');
     background-size: cover;
     background-position: center;
 }
@@ -34,7 +34,7 @@
 
 /* Custom CSS for additional styling */
 .hero {
-    background-image: url('iStoc.jpg');
+    background-image: url('Mount-Kenya-University-Alumni-Plaza.png');
     background-size: cover;
     background-position: center;
     height: 100vh;
