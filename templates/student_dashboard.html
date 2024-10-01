@@ -2,7 +2,50 @@
 {% block title %}Student Dashboard{% endblock %}
 {% block content %}
 <div class="container mt-5">
-    <h1>Welcome to the Student Dashboard</h1>
-    <!-- Add any student-specific content here -->
+    <h1>Welcome Student Dashboard</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table">
+  <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registration Number</td>
+        <td>{{student.registration_number}}</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+        <td>{{student.name}}</td>
+    </tr>
+    <tr>
+      <td>Email</td>
+        <td>{{student.email}}</td>
+    </tr>
+    <tr>
+      <td>Course Acronym</td>
+        <td>{{student.course_acronym}}</td>
+    </tr>
+    <tr>
+      <td>Phone Number</td>
+        <td>{{student.phone_number}}</td>
+    </tr>
+    <tr>
+      <td>Date of Birth</td>
+        <td>{{student.dob}}</td>
+    </tr>
+    <tr>
+      <td>Registration Date</td>
+        <td>{{student.created_at}}</td>
+    </tr>
+  </tbody>
+</table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

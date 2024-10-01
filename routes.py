@@ -13,6 +13,10 @@ main = Blueprint('main', __name__)
 def home():
     return render_template("index.html")
 
+@main.route('/about', methods=['GET'])
+def about():
+    return render_template("about.html")
+
 @main.route('/getStarted', methods=['GET'])
 def getStarted():
     return render_template("login-register.html")

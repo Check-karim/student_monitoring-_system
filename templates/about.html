@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %} HomePage {% endblock %}
+{% block content %}
+ <!-- Navigation Bar -->
+ <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Mount Kenya University</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/getStarted">Get Started</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-text">
+        <h1>Welcome to Mount Kenya university</h1>
+        <p>MKU is highly ranked in East Africa and beyond</p>
+        <a href="#get-started" class="btn btn-primary">Get Started</a>
+    </div>
+</section>
+
+
+  <!-- Features Section -->
+  <div class="container py-5">
+    <div class="row">
+      <!-- Teaching & Learning -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-graduation-cap fa-2x"></i>
+          </div>
+          <h5 class="feature-title">Teaching & Learning</h5>
+          <p class="feature-text">Mount Kenya University has dedicated faculty to train you for the industrial and self-employment job market.</p>
+        </div>
+      </div>
+
+      <!-- Research -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-lightbulb fa-2x"></i>
+          </div>
+          <h5 class="feature-title">Research</h5>
+          <p class="feature-text">The College of Graduate Studies and Research supports your postgraduate studies and innovations.</p>
+        </div>
+      </div>
+
+      <!-- Student Life -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-users fa-2x"></i>
+          </div>
+          <h5 class="feature-title">Student Life</h5>
+          <p class="feature-text">We mold your lifestyle outside the classroom with various sports and unwinding activities at the campuses.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <!-- International Students -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-globe fa-2x"></i>
+          </div>
+          <h5 class="feature-title">International Students</h5>
+          <p class="feature-text">Mount Kenya University is a top destination for international students studying either on-campus or online.</p>
+        </div>
+      </div>
+
+      <!-- Outreach Program -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-heart fa-2x"></i>
+          </div>
+          <h5 class="feature-title">Outreach Program</h5>
+          <p class="feature-text">We believe in supporting the community through various social responsibility programs.</p>
+        </div>
+      </div>
+
+      <!-- Alumni & Graduates -->
+      <div class="col-md-4">
+        <div class="feature-box">
+          <div class="feature-icon">
+            <i class="fas fa-star fa-2x"></i>
+          </div>
+          <h5 class="feature-title">Alumni & Graduates</h5>
+          <p class="feature-text">We support our alumni to enhance their employability and career growth.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
